@@ -113,6 +113,20 @@ class ViewController: NSViewController {
     statusLabel.stringValue = ""
   }
 
+  @IBAction func doubleClicked(_ sender: Any) {
+    guard let table = sender as? NSTableView else {
+      return
+    }
+
+    let row = table.selectedRow
+    guard row < self.buildTimes.count else {
+      return
+    }
+
+    let buildTime = buildTimes[row]
+    print(buildTime)
+  }
+
   override var representedObject: Any? {
     didSet {
       if let url = representedObject as? URL {
