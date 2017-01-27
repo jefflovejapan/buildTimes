@@ -30,6 +30,7 @@ class WindowController: NSWindowController {
     let openPanel = NSOpenPanel()
     openPanel.showsHiddenFiles = false
     openPanel.canChooseFiles = true
+    openPanel.allowsMultipleSelection = false
     openPanel.canChooseDirectories = false
 
     openPanel.beginSheetModal(for: self.window!) { response in

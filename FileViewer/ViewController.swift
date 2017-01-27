@@ -109,7 +109,7 @@ func appleScript(path: String, lineNumber: Int) -> NSAppleScript? {
 
   let script = templateStr.replacingOccurrences(of: ApplescriptKey.documentPath, with: "\"\(path)\"", options: [], range: nil)
     .replacingOccurrences(of: ApplescriptKey.startRange, with: String(lineNumber), options: [], range: nil)
-    .replacingOccurrences(of: ApplescriptKey.endRange, with: String(lineNumber), options: [], range: nil)
+    .replacingOccurrences(of: ApplescriptKey.endRange, with: String(99999), options: [], range: nil)
     .trimmingCharacters(in: .newlines)
 
   return NSAppleScript(source: script)
@@ -140,7 +140,7 @@ class ViewController: NSViewController {
     }
 
     let row = table.selectedRow
-    guard row < self.buildTimes.count else {
+    guard row < self.buildTimes.count && row >= 0 else {
       return
     }
 
@@ -152,7 +152,7 @@ class ViewController: NSViewController {
     if let script = script  {
       script.executeAndReturnError(autoreleasingPointer)
       if let dict = dict {
-        print(dict)
+        print("Error executing applescript: \(dump(dict))")
       }
     }
 
@@ -163,8 +163,6 @@ class ViewController: NSViewController {
   override var representedObject: Any? {
     didSet {
       if let url = representedObject as? URL {
-        print("Represented object: \(url)")
-
         let data: Data
         do {
           try data = Data(contentsOf: url, options: [])

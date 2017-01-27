@@ -4,4 +4,5 @@ tell application "Xcode"
 open doc
 set thisDoc to last item of source documents
 set selected paragraph range of thisDoc to {{startRange}, {endRange}}
+
 end tell
