@@ -55,7 +55,7 @@ struct FunctionBuildTime {
   var lineNumber: Int
 
   init (culpritsReadout: String) throws {
-    let comps: [String] = culpritsReadout.components(separatedBy: .whitespaces)
+    let comps: [String] = culpritsReadout.components(separatedBy: "\t")
     guard let firstComp = comps.first else {
       throw FunctionBuildTimeInitError.noFirstComponent(readout: culpritsReadout)
     }
@@ -94,6 +94,27 @@ struct FunctionBuildTime {
   }
 }
 
+enum ApplescriptKey {
+  static var documentPath = "{docPath}"
+  static var startRange = "{startRange}"
+  static var endRange = "{endRange}"
+}
+
+func appleScript(path: String, lineNumber: Int) -> NSAppleScript? {
+  guard let templatePath = Bundle.main.path(forResource: "applescript", ofType: "txt"),
+    let templateData = FileManager.default.contents(atPath: templatePath),
+    let templateStr = String(data: templateData, encoding: .utf8) else {
+      return nil
+  }
+
+  let script = templateStr.replacingOccurrences(of: ApplescriptKey.documentPath, with: "\"\(path)\"", options: [], range: nil)
+    .replacingOccurrences(of: ApplescriptKey.startRange, with: String(lineNumber), options: [], range: nil)
+    .replacingOccurrences(of: ApplescriptKey.endRange, with: String(lineNumber), options: [], range: nil)
+    .trimmingCharacters(in: .newlines)
+
+  return NSAppleScript(source: script)
+}
+
 class ViewController: NSViewController {
 
   @IBOutlet weak var statusLabel: NSTextField!
@@ -124,6 +145,18 @@ class ViewController: NSViewController {
     }
 
     let buildTime = buildTimes[row]
+    let script = appleScript(path: buildTime.path, lineNumber: buildTime.lineNumber)
+    var dict: NSDictionary? = nil
+    let pointer: UnsafeMutablePointer<NSDictionary?> = UnsafeMutablePointer(&dict)
+    let autoreleasingPointer: AutoreleasingUnsafeMutablePointer<NSDictionary?> = AutoreleasingUnsafeMutablePointer(pointer)
+    if let script = script  {
+      script.executeAndReturnError(autoreleasingPointer)
+      if let dict = dict {
+        print(dict)
+      }
+    }
+
+    //    script?.executeAndReturnError(pointer)
     print(buildTime)
   }
 
@@ -142,8 +175,7 @@ class ViewController: NSViewController {
 
         let str = String(data: data, encoding: .utf8)
         let lines = str?.components(separatedBy: .newlines) ?? []
-        self.buildTimes = lines.flatMap { readout in tryAndPrintError { try FunctionBuildTime(culpritsReadout: readout) } }
-        print(buildTimes)
+        self.buildTimes = lines.prefix(10).flatMap { readout in tryAndPrintError { try FunctionBuildTime(culpritsReadout: readout) } }
       }
     }
   }
@@ -181,7 +213,7 @@ extension ViewController: NSTableViewDelegate {
     case .path:
       cell.textField?.stringValue = buildTime.path
     }
-
+    
     return cell
   }
 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F9864801E3BC88000067E2A /* FileViewerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F98647F1E3BC88000067E2A /* FileViewerTests.swift */; };
+		1F9864881E3BD32F00067E2A /* applescript.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1F9864871E3BD32F00067E2A /* applescript.txt */; };
 		94E98A551BA381AA00FEC16F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E98A541BA381AA00FEC16F /* AppDelegate.swift */; };
 		94E98A571BA381AA00FEC16F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E98A561BA381AA00FEC16F /* ViewController.swift */; };
 		94E98A591BA381AB00FEC16F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94E98A581BA381AB00FEC16F /* Assets.xcassets */; };
@@ -15,7 +17,21 @@
 		94E98A681BA38A1200FEC16F /* Directory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E98A671BA38A1200FEC16F /* Directory.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		1F9864821E3BC88000067E2A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94E98A491BA381AA00FEC16F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 94E98A501BA381AA00FEC16F;
+			remoteInfo = FileViewer;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		1F98647D1E3BC88000067E2A /* FileViewerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FileViewerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F98647F1E3BC88000067E2A /* FileViewerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileViewerTests.swift; sourceTree = "<group>"; };
+		1F9864811E3BC88000067E2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1F9864871E3BD32F00067E2A /* applescript.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = applescript.txt; sourceTree = "<group>"; };
 		94E98A511BA381AA00FEC16F /* FileViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FileViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94E98A541BA381AA00FEC16F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94E98A561BA381AA00FEC16F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -27,6 +43,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1F98647A1E3BC88000067E2A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94E98A4E1BA381AA00FEC16F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -37,10 +60,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F98647E1E3BC88000067E2A /* FileViewerTests */ = {
+			isa = PBXGroup;
+			children = (
+				1F98647F1E3BC88000067E2A /* FileViewerTests.swift */,
+				1F9864811E3BC88000067E2A /* Info.plist */,
+			);
+			path = FileViewerTests;
+			sourceTree = "<group>";
+		};
 		94E98A481BA381AA00FEC16F = {
 			isa = PBXGroup;
 			children = (
 				94E98A531BA381AA00FEC16F /* FileViewer */,
+				1F98647E1E3BC88000067E2A /* FileViewerTests */,
 				94E98A521BA381AA00FEC16F /* Products */,
 			);
 			indentWidth = 2;
@@ -51,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				94E98A511BA381AA00FEC16F /* FileViewer.app */,
+				1F98647D1E3BC88000067E2A /* FileViewerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -60,6 +94,7 @@
 			children = (
 				94E98A541BA381AA00FEC16F /* AppDelegate.swift */,
 				94E98A561BA381AA00FEC16F /* ViewController.swift */,
+				1F9864871E3BD32F00067E2A /* applescript.txt */,
 				94E98A581BA381AB00FEC16F /* Assets.xcassets */,
 				94E98A5A1BA381AB00FEC16F /* Main.storyboard */,
 				94E98A5D1BA381AB00FEC16F /* Info.plist */,
@@ -72,6 +107,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1F98647C1E3BC88000067E2A /* FileViewerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1F9864861E3BC88000067E2A /* Build configuration list for PBXNativeTarget "FileViewerTests" */;
+			buildPhases = (
+				1F9864791E3BC88000067E2A /* Sources */,
+				1F98647A1E3BC88000067E2A /* Frameworks */,
+				1F98647B1E3BC88000067E2A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1F9864831E3BC88000067E2A /* PBXTargetDependency */,
+			);
+			name = FileViewerTests;
+			productName = FileViewerTests;
+			productReference = 1F98647D1E3BC88000067E2A /* FileViewerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		94E98A501BA381AA00FEC16F /* FileViewer */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 94E98A601BA381AB00FEC16F /* Build configuration list for PBXNativeTarget "FileViewer" */;
@@ -95,9 +148,15 @@
 		94E98A491BA381AA00FEC16F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = razeware;
 				TargetAttributes = {
+					1F98647C1E3BC88000067E2A = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 94E98A501BA381AA00FEC16F;
+					};
 					94E98A501BA381AA00FEC16F = {
 						CreatedOnToolsVersion = 7.0;
 						LastSwiftMigration = 0800;
@@ -118,23 +177,40 @@
 			projectRoot = "";
 			targets = (
 				94E98A501BA381AA00FEC16F /* FileViewer */,
+				1F98647C1E3BC88000067E2A /* FileViewerTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1F98647B1E3BC88000067E2A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94E98A4F1BA381AA00FEC16F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				94E98A591BA381AB00FEC16F /* Assets.xcassets in Resources */,
 				94E98A5C1BA381AB00FEC16F /* Main.storyboard in Resources */,
+				1F9864881E3BD32F00067E2A /* applescript.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1F9864791E3BC88000067E2A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1F9864801E3BC88000067E2A /* FileViewerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94E98A4D1BA381AA00FEC16F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -148,6 +224,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		1F9864831E3BC88000067E2A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 94E98A501BA381AA00FEC16F /* FileViewer */;
+			targetProxy = 1F9864821E3BC88000067E2A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		94E98A5A1BA381AB00FEC16F /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -160,6 +244,41 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1F9864841E3BC88000067E2A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = FileViewerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jeff.FileViewerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FileViewer.app/Contents/MacOS/FileViewer";
+			};
+			name = Debug;
+		};
+		1F9864851E3BC88000067E2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = FileViewerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jeff.FileViewerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FileViewer.app/Contents/MacOS/FileViewer";
+			};
+			name = Release;
+		};
 		94E98A5E1BA381AB00FEC16F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -274,6 +393,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1F9864861E3BC88000067E2A /* Build configuration list for PBXNativeTarget "FileViewerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F9864841E3BC88000067E2A /* Debug */,
+				1F9864851E3BC88000067E2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		94E98A4C1BA381AA00FEC16F /* Build configuration list for PBXProject "FileViewer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
