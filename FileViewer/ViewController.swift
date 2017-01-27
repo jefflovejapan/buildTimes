@@ -119,11 +119,38 @@ class ViewController: NSViewController {
 
   @IBOutlet weak var statusLabel: NSTextField!
   @IBOutlet weak var tableView: NSTableView!
+  @IBOutlet weak var selectionTextLabel: NSTextField!
 
   var buildTimes: [FunctionBuildTime] = [] {
     didSet {
       tableView?.reloadData()
     }
+  }
+
+  var selectedBuildTimes: [FunctionBuildTime] = [] {
+    didSet {
+      updateBuildTimesLabel(buildTimes: selectedBuildTimes)
+    }
+  }
+
+  private func updateBuildTimesLabel(buildTimes: [FunctionBuildTime]) {
+    let countSuffix = buildTimes.count == 1 ? "item" : "items"
+    let uniqueFiles = buildTimes.reduce([]) { (accum, buildTime) -> Set<String> in
+      var newAccum = accum
+      newAccum.insert(buildTime.path)
+      return newAccum
+    }
+
+    let fileCountSuffix = uniqueFiles.count == 1 ? "file" : "files"
+    let sortedBuildTimes = buildTimes.sorted { $0.0.buildTimeSeconds < $0.1.buildTimeSeconds }
+    let totalDuration = sortedBuildTimes.map{ $0.buildTimeSeconds }.reduce(0, +)
+    let meanDuration: TimeInterval
+    if buildTimes.isEmpty {
+      meanDuration = 0
+    } else {
+      meanDuration = totalDuration / Double(buildTimes.count)
+    }
+    selectionTextLabel.stringValue = "\(buildTimes.count) \(countSuffix) in \(uniqueFiles.count) \(fileCountSuffix)     Total time: \(totalDuration)s     Mean: \(meanDuration)s"
   }
 
   var sortOrder = BuildTimeOrder.buildTime
@@ -132,10 +159,32 @@ class ViewController: NSViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     statusLabel.stringValue = ""
+    updateBuildTimesLabel(buildTimes: selectedBuildTimes)
+  }
+
+  func tableViewSelectionDidChange(_ notification: Notification) {
+    guard let table = notification.object as? NSTableView else {
+      return
+    }
+
+    let indices = table.selectedRowIndexes
+    let buildTimes = indices.flatMap { [unowned self] index -> FunctionBuildTime? in
+      guard index < self.buildTimes.count else {
+        return nil
+      }
+
+      return self.buildTimes[index]
+    }
+
+    self.selectedBuildTimes = buildTimes
   }
 
   @IBAction func doubleClicked(_ sender: Any) {
     guard let table = sender as? NSTableView else {
+      return
+    }
+
+    guard table.selectedRowIndexes.count == 1 else {
       return
     }
 
@@ -214,6 +263,8 @@ extension ViewController: NSTableViewDelegate {
     
     return cell
   }
+  
+  
 }
 
 

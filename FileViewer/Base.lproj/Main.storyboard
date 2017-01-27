@@ -889,6 +889,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="selectionTextLabel" destination="hal-cr-hVu" id="gs2-U3-0W0"/>
                         <outlet property="statusLabel" destination="hal-cr-hVu" id="JeZ-FD-eYk"/>
                         <outlet property="tableView" destination="NfM-Aj-f0v" id="Lhs-Yk-Bay"/>
                     </connections>
