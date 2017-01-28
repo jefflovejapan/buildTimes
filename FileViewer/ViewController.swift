@@ -22,98 +22,6 @@
 
 import Cocoa
 
-enum FunctionBuildTimeInitError: Error {
-  case noFirstComponent(readout: String)
-  case invalidFirstComponent(readout: String, component: String)
-  case unableToCreateTime(readout: String)
-  case tooFewComponents(readout: String)
-  case noLineNumberInPath(readout: String, path: String)
-  case invalidLineNumber(readout: String, lineNo: String)
-  case noFunctionName(readout: String)
-}
-
-func tryAndPrintError<T>(_ f: () throws -> T) -> T? {
-  do {
-    return try f()
-  } catch {
-    print(error)
-    return nil
-  }
-}
-
-enum BuildTimeOrder: String {
-  case buildTime = "buildTime"
-  case path = "path"
-  case functionName = "functionName"
-  case lineNumber = "lineNumber"
-}
-
-struct FunctionBuildTime {
-  var buildTimeSeconds: TimeInterval
-  var path: String
-  var functionName: String
-  var lineNumber: Int
-
-  init (culpritsReadout: String) throws {
-    let comps: [String] = culpritsReadout.components(separatedBy: "\t")
-    guard let firstComp = comps.first else {
-      throw FunctionBuildTimeInitError.noFirstComponent(readout: culpritsReadout)
-    }
-
-    guard String(firstComp.characters.suffix(2)) == "ms" else {
-      throw FunctionBuildTimeInitError.invalidFirstComponent(readout: culpritsReadout, component: firstComp)
-    }
-
-    let withoutMS = firstComp.characters.dropLast(2)
-    guard let timeMS = Double(String(withoutMS)) else {
-      throw FunctionBuildTimeInitError.unableToCreateTime(readout: culpritsReadout)
-    }
-
-    let remaining = comps.dropFirst()
-    guard let pathLineCol = remaining.first else {
-      throw FunctionBuildTimeInitError.tooFewComponents(readout: culpritsReadout)
-    }
-
-    let pathComps = pathLineCol.components(separatedBy: ":")
-    guard pathComps.count >= 2 else {
-      throw FunctionBuildTimeInitError.noLineNumberInPath(readout: culpritsReadout, path: pathLineCol)
-    }
-
-    let path = pathComps[0]
-    let lineStr = pathComps[1]
-    guard let line = Int(lineStr) else {
-      throw FunctionBuildTimeInitError.invalidLineNumber(readout: culpritsReadout, lineNo: lineStr)
-    }
-
-    let functionName = remaining.dropFirst().joined(separator: " ")
-
-    self.buildTimeSeconds = timeMS / 1000
-    self.path = String(path)
-    self.functionName = functionName.isEmpty ? "*** NO FUNCTION NAME ***" : functionName
-    self.lineNumber = line
-  }
-}
-
-enum ApplescriptKey {
-  static var documentPath = "{docPath}"
-  static var startRange = "{startRange}"
-  static var endRange = "{endRange}"
-}
-
-func appleScript(path: String, lineNumber: Int) -> NSAppleScript? {
-  guard let templatePath = Bundle.main.path(forResource: "applescript", ofType: "txt"),
-    let templateData = FileManager.default.contents(atPath: templatePath),
-    let templateStr = String(data: templateData, encoding: .utf8) else {
-      return nil
-  }
-
-  let script = templateStr.replacingOccurrences(of: ApplescriptKey.documentPath, with: "\"\(path)\"", options: [], range: nil)
-    .replacingOccurrences(of: ApplescriptKey.startRange, with: String(lineNumber), options: [], range: nil)
-    .replacingOccurrences(of: ApplescriptKey.endRange, with: String(99999), options: [], range: nil)
-    .trimmingCharacters(in: .newlines)
-
-  return NSAppleScript(source: script)
-}
 
 class ViewController: NSViewController {
 
@@ -121,8 +29,14 @@ class ViewController: NSViewController {
   @IBOutlet weak var tableView: NSTableView!
   @IBOutlet weak var selectionTextLabel: NSTextField!
 
+  let descriptorTime = NSSortDescriptor(key: BuildTimeOrder.buildTime.rawValue, ascending: true)
+  let descriptorPath = NSSortDescriptor(key: BuildTimeOrder.path.rawValue, ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
+  let descriptorFunctionName = NSSortDescriptor(key: BuildTimeOrder.functionName.rawValue, ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
+  let descriptorLineNumber = NSSortDescriptor(key: BuildTimeOrder.lineNumber.rawValue, ascending: true)
+
   var buildTimes: [FunctionBuildTime] = [] {
     didSet {
+      selectedBuildTimes = []
       tableView?.reloadData()
     }
   }
@@ -150,7 +64,22 @@ class ViewController: NSViewController {
     } else {
       meanDuration = totalDuration / Double(buildTimes.count)
     }
-    selectionTextLabel.stringValue = "\(buildTimes.count) \(countSuffix) in \(uniqueFiles.count) \(fileCountSuffix)     Total time: \(totalDuration)s     Mean: \(meanDuration)s"
+
+    let stdDev: Double
+
+    if buildTimes.isEmpty {
+      stdDev = 0
+    } else {
+      let sumSigmaSquared = sortedBuildTimes.reduce(0) { (accum, buildTime) -> Double in
+        let term = (buildTime.buildTimeSeconds - meanDuration) * (buildTime.buildTimeSeconds - meanDuration)
+        return accum + term
+      }
+
+      let variance = sumSigmaSquared / Double(buildTimes.count)
+      stdDev = sqrt(variance)
+    }
+
+    selectionTextLabel.stringValue = "\(buildTimes.count) \(countSuffix) in \(uniqueFiles.count) \(fileCountSuffix)     Total time: \(totalDuration)s     Mean: \(meanDuration)s     Std dev: \(stdDev)s"
   }
 
   var sortOrder = BuildTimeOrder.buildTime
@@ -160,6 +89,10 @@ class ViewController: NSViewController {
     super.viewDidLoad()
     statusLabel.stringValue = ""
     updateBuildTimesLabel(buildTimes: selectedBuildTimes)
+    tableView.tableColumns[0].sortDescriptorPrototype = descriptorTime
+    tableView.tableColumns[1].sortDescriptorPrototype = descriptorPath
+    tableView.tableColumns[2].sortDescriptorPrototype = descriptorFunctionName
+    tableView.tableColumns[3].sortDescriptorPrototype = descriptorLineNumber
   }
 
   func tableViewSelectionDidChange(_ notification: Notification) {
@@ -194,7 +127,7 @@ class ViewController: NSViewController {
     }
 
     let buildTime = buildTimes[row]
-    let script = appleScript(path: buildTime.path, lineNumber: buildTime.lineNumber)
+    let script = NSAppleScript.xcodeMakeSelection(path: buildTime.path, lineNumber: buildTime.lineNumber)
     var dict: NSDictionary? = nil
     let pointer: UnsafeMutablePointer<NSDictionary?> = UnsafeMutablePointer(&dict)
     let autoreleasingPointer: AutoreleasingUnsafeMutablePointer<NSDictionary?> = AutoreleasingUnsafeMutablePointer(pointer)
@@ -205,7 +138,6 @@ class ViewController: NSViewController {
       }
     }
 
-    //    script?.executeAndReturnError(pointer)
     print(buildTime)
   }
 
@@ -222,7 +154,7 @@ class ViewController: NSViewController {
 
         let str = String(data: data, encoding: .utf8)
         let lines = str?.components(separatedBy: .newlines) ?? []
-        self.buildTimes = lines.prefix(10).flatMap { readout in tryAndPrintError { try FunctionBuildTime(culpritsReadout: readout) } }
+        self.buildTimes = lines.flatMap { readout in tryAndPrintError { try FunctionBuildTime(culpritsReadout: readout) } }
       }
     }
   }
@@ -260,11 +192,87 @@ extension ViewController: NSTableViewDelegate {
     case .path:
       cell.textField?.stringValue = buildTime.path
     }
-    
+
     return cell
   }
-  
-  
+
+  typealias BuildTimeSortDescriptor = SortDescriptor<FunctionBuildTime>
+
+  func sortDescriptors(grossDescriptors: [NSSortDescriptor]) -> [BuildTimeSortDescriptor] {
+    return grossDescriptors.reduce([], { (accum, descriptor) -> [BuildTimeSortDescriptor] in
+      guard let key = descriptor.key, let ordering = BuildTimeOrder(rawValue: key) else {
+        return accum
+      }
+
+      var newAccum = accum
+      let ascending = descriptor.ascending
+      let newDescriptor: BuildTimeSortDescriptor
+      switch (ordering) {
+      case .buildTime:
+        newDescriptor = sortDescriptor(key: { (buildTime: FunctionBuildTime) -> TimeInterval in buildTime.buildTimeSeconds }, ascending: ascending, { lhs in
+          return { rhs in
+            if lhs < rhs {
+              return .orderedAscending
+            } else if lhs > rhs {
+              return .orderedDescending
+            } else {
+              return .orderedSame
+            }
+          }
+        })
+      case .path:
+        newDescriptor = sortDescriptor(key: { (buildTime: FunctionBuildTime) -> String in buildTime.path }, ascending: ascending, { lhs in
+          return { rhs in
+            if lhs < rhs {
+              return .orderedAscending
+            } else if lhs > rhs {
+              return .orderedDescending
+            } else {
+              return .orderedSame
+            }
+          }
+        })
+
+      case .functionName:
+        newDescriptor = sortDescriptor(key: { (buildTime: FunctionBuildTime) -> String in buildTime.functionName }, ascending: ascending, { lhs in
+          return { rhs in
+            if lhs < rhs {
+              return .orderedAscending
+            } else if lhs > rhs {
+              return .orderedDescending
+            } else {
+              return .orderedSame
+            }
+          }
+        })
+
+      case .lineNumber:
+        newDescriptor = sortDescriptor(key: { (buildTime: FunctionBuildTime) -> Int in buildTime.lineNumber }, ascending: ascending, { lhs in
+          return { rhs in
+            if lhs < rhs {
+              return .orderedAscending
+            } else if lhs > rhs {
+              return .orderedDescending
+            } else {
+              return .orderedSame
+            }
+          }
+        })
+
+      }
+
+      newAccum.append(newDescriptor)
+      return newAccum
+    })
+  }
+
+  func tableView(_ tableView: NSTableView, sortDescriptorsDidChange oldDescriptors: [NSSortDescriptor]) {
+    tableView.deselectAll(nil)
+    let newDescriptors = tableView.sortDescriptors
+    let goodDescriptors = sortDescriptors(grossDescriptors: newDescriptors)
+    let singleDescriptor = combine(sortDescriptors: goodDescriptors)
+    self.buildTimes.sort(by: singleDescriptor)
+  }
 }
 
 

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "94E98A501BA381AA00FEC16F"
-               BuildableName = "FileViewer.app"
-               BlueprintName = "FileViewer"
-               ReferencedContainer = "container:FileViewer.xcodeproj">
+               BuildableName = "BuildTimeInspector.app"
+               BlueprintName = "BuildTimeInspector"
+               ReferencedContainer = "container:BuildTimeInspector.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1F98647C1E3BC88000067E2A"
-               BuildableName = "FileViewerTests.xctest"
-               BlueprintName = "FileViewerTests"
-               ReferencedContainer = "container:FileViewer.xcodeproj">
+               BuildableName = "BuildTimeInspectorTests.xctest"
+               BlueprintName = "BuildTimeInspectorTests"
+               ReferencedContainer = "container:BuildTimeInspector.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "94E98A501BA381AA00FEC16F"
-            BuildableName = "FileViewer.app"
-            BlueprintName = "FileViewer"
-            ReferencedContainer = "container:FileViewer.xcodeproj">
+            BuildableName = "BuildTimeInspector.app"
+            BlueprintName = "BuildTimeInspector"
+            ReferencedContainer = "container:BuildTimeInspector.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -66,9 +66,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "94E98A501BA381AA00FEC16F"
-            BuildableName = "FileViewer.app"
-            BlueprintName = "FileViewer"
-            ReferencedContainer = "container:FileViewer.xcodeproj">
+            BuildableName = "BuildTimeInspector.app"
+            BlueprintName = "BuildTimeInspector"
+            ReferencedContainer = "container:BuildTimeInspector.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -85,9 +85,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "94E98A501BA381AA00FEC16F"
-            BuildableName = "FileViewer.app"
-            BlueprintName = "FileViewer"
-            ReferencedContainer = "container:FileViewer.xcodeproj">
+            BuildableName = "BuildTimeInspector.app"
+            BlueprintName = "BuildTimeInspector"
+            ReferencedContainer = "container:BuildTimeInspector.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

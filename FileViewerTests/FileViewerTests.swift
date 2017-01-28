@@ -9,6 +9,7 @@
 import XCTest
 @testable import FileViewer
 
+
 class FileViewerTests: XCTestCase {
     
     override func setUp() {
@@ -29,7 +30,7 @@ class FileViewerTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
-    
+
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {
