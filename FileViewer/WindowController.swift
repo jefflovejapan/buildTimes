@@ -39,4 +39,6 @@ class WindowController: NSWindowController {
       self.contentViewController?.representedObject = openPanel.url
     }
   }
+
+  
 }
