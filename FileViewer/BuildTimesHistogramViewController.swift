@@ -118,7 +118,21 @@ class BuildTimesHistogramViewController: NSViewController, NSCollectionViewDeleg
 
 
   func doubleClicked(sender: NSCollectionViewItem) {
-    print("double clicked: \(sender)")
+    guard let collectionView = collectionView, let path = collectionView.indexPath(for: sender), path.item < buildTimes.count else {
+      return
+    }
+
+    let buildTime = buildTimes[path.item]
+    let script = NSAppleScript.xcodeMakeSelection(path: buildTime.path, lineNumber: buildTime.lineNumber)
+    var dict: NSDictionary? = nil
+    let pointer: UnsafeMutablePointer<NSDictionary?> = UnsafeMutablePointer(&dict)
+    let autoreleasingPointer: AutoreleasingUnsafeMutablePointer<NSDictionary?> = AutoreleasingUnsafeMutablePointer(pointer)
+    if let script = script  {
+      script.executeAndReturnError(autoreleasingPointer)
+      if let dict = dict {
+        print("Error executing applescript: \(dump(dict))")
+      }
+    }
   }
 
   func mousedOver(sender: NSCollectionViewItem) {
