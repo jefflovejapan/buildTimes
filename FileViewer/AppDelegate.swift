@@ -24,6 +24,58 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
+  func applicationDidFinishLaunching(_ notification: Notification) {
 
+    let tableItem = NSMenuItem(title: "Table", action: #selector(tableItemSelected), keyEquivalent: "1")
+    let histogramItem = NSMenuItem(title: "Histogram", action: #selector(histogramItemSelected), keyEquivalent: "2")
+
+    guard let menu = NSApplication.shared().mainMenu else {
+      return
+    }
+
+    let maybeViewItem = menu.items.first { $0.title == "View" }
+    if let viewItem = maybeViewItem {
+      viewItem.submenu?.addItem(tableItem)
+      viewItem.submenu?.addItem(histogramItem)
+    }
+
+    dump(NSApplication.shared().mainMenu)
+  }
+
+  @objc func tableItemSelected() {
+    guard let controller = NSApplication.shared().keyWindow?.windowController?.contentViewController else {
+      return
+    }
+
+    switch controller {
+    case let histogramController as BuildTimesHistogramViewController:
+      guard let tableController = NSStoryboard(name: "Main", bundle: nil).instantiateController(withIdentifier: String(describing: BuildTimesTableViewController.self)) as? BuildTimesTableViewController else {
+        return
+      }
+
+      tableController.buildTimes = histogramController.buildTimes
+      NSApplication.shared().keyWindow?.windowController?.contentViewController = tableController
+    default:
+      return
+    }
+  }
+
+  @objc func histogramItemSelected() {
+    guard let controller = NSApplication.shared().keyWindow?.windowController?.contentViewController else {
+      return
+    }
+
+    switch controller {
+    case let tableController as BuildTimesTableViewController:
+      guard let histogram = NSStoryboard(name: "Main", bundle: nil).instantiateController(withIdentifier: String(describing: BuildTimesHistogramViewController.self)) as? BuildTimesHistogramViewController else {
+        return
+      }
+
+      histogram.buildTimes = tableController.buildTimes
+      NSApplication.shared().keyWindow?.windowController?.contentViewController = histogram
+    default:
+      return
+    }
+  }
 }
 

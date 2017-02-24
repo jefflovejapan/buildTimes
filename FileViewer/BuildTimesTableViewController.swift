@@ -23,7 +23,7 @@
 import Cocoa
 
 
-class ViewController: NSViewController {
+class BuildTimesTableViewController: NSViewController {
 
   @IBOutlet weak var statusLabel: NSTextField!
   @IBOutlet weak var tableView: NSTableView!
@@ -34,7 +34,7 @@ class ViewController: NSViewController {
   let descriptorFunctionName = NSSortDescriptor(key: BuildTimeOrder.functionName.rawValue, ascending: true, selector: #selector(NSString.caseInsensitiveCompare))
   let descriptorLineNumber = NSSortDescriptor(key: BuildTimeOrder.lineNumber.rawValue, ascending: true)
 
-  var buildTimes: [FunctionBuildTime] = [] {
+  public var buildTimes: [FunctionBuildTime] = [] {
     didSet {
       selectedBuildTimes = []
       tableView?.reloadData()
@@ -43,11 +43,15 @@ class ViewController: NSViewController {
 
   var selectedBuildTimes: [FunctionBuildTime] = [] {
     didSet {
-      updateBuildTimesLabel(buildTimes: selectedBuildTimes)
+        updateBuildTimesLabel(buildTimes: selectedBuildTimes)
     }
   }
 
   private func updateBuildTimesLabel(buildTimes: [FunctionBuildTime]) {
+    guard selectionTextLabel != nil else {
+      return
+    }
+    
     let countSuffix = buildTimes.count == 1 ? "item" : "items"
     let uniqueFiles = buildTimes.reduce([]) { (accum, buildTime) -> Set<String> in
       var newAccum = accum
@@ -158,15 +162,27 @@ class ViewController: NSViewController {
       }
     }
   }
+
+  public func switchToHistogram() {
+    performSegue(withIdentifier: "showHistogram", sender: nil)
+  }
+
+  override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+    guard let histogram = segue.destinationController as? BuildTimesHistogramViewController else {
+      return
+    }
+
+    histogram.buildTimes = buildTimes
+  }
 }
 
-extension ViewController: NSTableViewDataSource {
+extension BuildTimesTableViewController: NSTableViewDataSource {
   func numberOfRows(in tableView: NSTableView) -> Int {
     return self.buildTimes.count
   }
 }
 
-extension ViewController: NSTableViewDelegate {
+extension BuildTimesTableViewController: NSTableViewDelegate {
   func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
     guard row < self.buildTimes.count, let column = tableColumn else {
       return nil

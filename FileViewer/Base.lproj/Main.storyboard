@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
         <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
@@ -643,7 +644,7 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="FileViewer" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="BuildTimeInspector" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
@@ -651,7 +652,7 @@
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
             <objects>
-                <windowController id="B8D-0N-5wS" customClass="WindowController" customModule="FileViewer" customModuleProvider="target" sceneMemberID="viewController">
+                <windowController id="B8D-0N-5wS" customClass="WindowController" customModule="BuildTimeInspector" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="File Viewer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -667,10 +668,64 @@
             </objects>
             <point key="canvasLocation" x="74" y="304"/>
         </scene>
-        <!--View Controller-->
+        <!--BuildTimesHistogramViewController-->
+        <scene sceneID="H38-sS-2Vq">
+            <objects>
+                <viewController title="BuildTimesHistogramViewController" storyboardIdentifier="BuildTimesHistogramViewController" id="W8Y-Wg-WRb" customClass="BuildTimesHistogramViewController" customModule="BuildTimeInspector" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="CTq-GH-2H3">
+                        <rect key="frame" x="0.0" y="0.0" width="672" height="443"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6nD-yl-prp">
+                                <rect key="frame" x="0.0" y="0.0" width="672" height="443"/>
+                                <clipView key="contentView" drawsBackground="NO" id="lbw-fH-ZVF">
+                                    <rect key="frame" x="1" y="1" width="670" height="441"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <collectionView id="m9M-dt-XJD">
+                                            <rect key="frame" x="0.0" y="0.0" width="670" height="441"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" scrollDirection="horizontal" id="Dnd-s3-KOV">
+                                                <size key="itemSize" width="50" height="50"/>
+                                            </collectionViewFlowLayout>
+                                            <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <connections>
+                                                <outlet property="dataSource" destination="W8Y-Wg-WRb" id="3vW-jo-vV1"/>
+                                                <outlet property="delegate" destination="W8Y-Wg-WRb" id="yie-wC-Vcr"/>
+                                            </connections>
+                                        </collectionView>
+                                    </subviews>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="6Yd-uJ-JJW">
+                                    <rect key="frame" x="1" y="144" width="233" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="9mN-nB-chy">
+                                    <rect key="frame" x="234" y="1" width="15" height="143"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="6nD-yl-prp" firstAttribute="leading" secondItem="CTq-GH-2H3" secondAttribute="leading" id="Cyq-QZ-0HW"/>
+                            <constraint firstAttribute="trailing" secondItem="6nD-yl-prp" secondAttribute="trailing" id="GQH-Sa-cJW"/>
+                            <constraint firstAttribute="bottom" secondItem="6nD-yl-prp" secondAttribute="bottom" id="Rig-TX-o0q"/>
+                            <constraint firstItem="6nD-yl-prp" firstAttribute="top" secondItem="CTq-GH-2H3" secondAttribute="top" id="VlB-1G-XJe"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="m9M-dt-XJD" id="C4T-XZ-Lwq"/>
+                    </connections>
+                </viewController>
+                <customObject id="M4i-jm-N1p" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="761" y="807.5"/>
+        </scene>
+        <!--BuildTimesTableViewController-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="FileViewer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="BuildTimesTableViewController" storyboardIdentifier="BuildTimesTableViewController" id="XfG-lQ-9wD" customClass="BuildTimesTableViewController" customModule="BuildTimeInspector" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="523" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -683,16 +738,16 @@
                                         <subviews>
                                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yQY-Hq-4ou">
                                                 <rect key="frame" x="0.0" y="0.0" width="523" height="240"/>
-                                                <clipView key="contentView" id="Vej-tG-sAm">
+                                                <clipView key="contentView" drawsBackground="NO" id="Vej-tG-sAm">
                                                     <rect key="frame" x="1" y="0.0" width="521" height="239"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" autosaveColumns="NO" rowSizeStyle="automatic" headerView="OaM-4R-XYm" viewBased="YES" id="NfM-Aj-f0v">
+                                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="none" alternatingRowBackgroundColors="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="OaM-4R-XYm" viewBased="YES" id="NfM-Aj-f0v">
                                                             <rect key="frame" x="0.0" y="0.0" width="638" height="216"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="gridColor" red="0.36074221635125103" green="0.99293441785274816" blue="0.9945768521066054" alpha="0.24515912576687116" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <tableColumns>
                                                                 <tableColumn identifier="buildTime" width="116" minWidth="40" maxWidth="1000" id="ZgG-sS-23N">
                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Build Time">
@@ -809,20 +864,6 @@
                                                                         <tableCellView identifier="whatever" id="ffq-k8-a44">
                                                                             <rect key="frame" x="626" y="1" width="10" height="17"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                            <subviews>
-                                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aap-zv-gkt">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="10" height="17"/>
-                                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="J1P-wR-6Tq">
-                                                                                        <font key="font" metaFont="system"/>
-                                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                                    </textFieldCell>
-                                                                                </textField>
-                                                                            </subviews>
-                                                                            <connections>
-                                                                                <outlet property="textField" destination="aap-zv-gkt" id="gEb-hZ-D5h"/>
-                                                                            </connections>
                                                                         </tableCellView>
                                                                     </prototypeCellViews>
                                                                 </tableColumn>
@@ -834,6 +875,7 @@
                                                             </connections>
                                                         </tableView>
                                                     </subviews>
+                                                    <nil key="backgroundColor"/>
                                                 </clipView>
                                                 <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="vee-m0-pKb">
                                                     <rect key="frame" x="1" y="223" width="521" height="16"/>
@@ -891,6 +933,7 @@
                         <outlet property="selectionTextLabel" destination="hal-cr-hVu" id="gs2-U3-0W0"/>
                         <outlet property="statusLabel" destination="hal-cr-hVu" id="JeZ-FD-eYk"/>
                         <outlet property="tableView" destination="NfM-Aj-f0v" id="Lhs-Yk-Bay"/>
+                        <segue destination="W8Y-Wg-WRb" kind="sheet" identifier="showHistogram" id="Vkj-IW-nnS"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
