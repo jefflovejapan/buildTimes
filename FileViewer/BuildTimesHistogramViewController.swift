@@ -20,6 +20,10 @@ class HistogramBar: NSCollectionViewItem {
       mouseDelegate?.doubleClicked(sender: self)
     }
   }
+
+  @IBOutlet weak var barViewTopConstraint: NSLayoutConstraint!
+
+  @IBOutlet weak var barView: NSView!
 }
 
 extension CGColor {
@@ -110,7 +114,22 @@ class BuildTimesHistogramViewController: NSViewController, NSCollectionViewDeleg
     guard let histogramBar = collectionView.makeItem(withIdentifier: String(describing: HistogramBar.self), for: indexPath) as? HistogramBar else {
       fatalError()
     }
-    histogramBar.view.layer?.backgroundColor = .random
+    histogramBar.barView?.layer?.backgroundColor = .random
+    if indexPath.item < buildTimes.count {
+      let buildTime = buildTimes[indexPath.item]
+      let maybeLongest = buildTimes.max { (lhs: FunctionBuildTime, rhs: FunctionBuildTime) -> Bool in lhs.buildTimeSeconds < rhs.buildTimeSeconds }
+      let buildTimeFraction: Double
+      if let longest = maybeLongest {
+        buildTimeFraction = buildTime.buildTimeSeconds / longest.buildTimeSeconds
+      } else {
+        buildTimeFraction = 1
+      }
+
+      histogramBar.barViewTopConstraint.constant = itemSize.height * CGFloat(1.0 - buildTimeFraction)
+    } else {
+      histogramBar.barViewTopConstraint.constant = 0
+    }
+
     histogramBar.mouseDelegate = self
     return histogramBar
   }

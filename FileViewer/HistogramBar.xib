@@ -13,7 +13,22 @@
             <customView key="view" id="zQB-ni-lJy">
                 <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <subviews>
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="YXf-Ya-ZH3">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                    </customView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="YXf-Ya-ZH3" secondAttribute="trailing" id="NVm-JP-hhZ"/>
+                    <constraint firstItem="YXf-Ya-ZH3" firstAttribute="top" secondItem="zQB-ni-lJy" secondAttribute="top" id="QoW-6t-V8j"/>
+                    <constraint firstAttribute="bottom" secondItem="YXf-Ya-ZH3" secondAttribute="bottom" id="djI-gn-JEW"/>
+                    <constraint firstItem="YXf-Ya-ZH3" firstAttribute="leading" secondItem="zQB-ni-lJy" secondAttribute="leading" id="uEl-De-KX9"/>
+                </constraints>
             </customView>
+            <connections>
+                <outlet property="barView" destination="YXf-Ya-ZH3" id="SWg-h3-9eU"/>
+                <outlet property="barViewTopConstraint" destination="QoW-6t-V8j" id="f6B-be-B0B"/>
+            </connections>
         </collectionViewItem>
     </objects>
 </document>
