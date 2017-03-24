@@ -10,24 +10,37 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <collectionViewItem nibName="HistogramBar" id="ofY-oZ-xHM" customClass="HistogramBar" customModule="BuildTimeInspector" customModuleProvider="target">
-            <customView key="view" id="zQB-ni-lJy">
+            <customView key="view" misplaced="YES" id="zQB-ni-lJy">
                 <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                 <subviews>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="YXf-Ya-ZH3">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <rect key="frame" x="2" y="2" width="446" height="17"/>
                     </customView>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="88T-7z-OdE">
+                        <rect key="frame" x="0.0" y="2" width="450" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="Aox-Jq-qMq">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="YXf-Ya-ZH3" secondAttribute="trailing" id="NVm-JP-hhZ"/>
-                    <constraint firstItem="YXf-Ya-ZH3" firstAttribute="top" secondItem="zQB-ni-lJy" secondAttribute="top" id="QoW-6t-V8j"/>
-                    <constraint firstAttribute="bottom" secondItem="YXf-Ya-ZH3" secondAttribute="bottom" id="djI-gn-JEW"/>
-                    <constraint firstItem="YXf-Ya-ZH3" firstAttribute="leading" secondItem="zQB-ni-lJy" secondAttribute="leading" id="uEl-De-KX9"/>
+                    <constraint firstItem="88T-7z-OdE" firstAttribute="top" secondItem="zQB-ni-lJy" secondAttribute="top" constant="2" id="0eB-Oj-H8I"/>
+                    <constraint firstAttribute="trailing" secondItem="YXf-Ya-ZH3" secondAttribute="trailing" constant="2" id="NVm-JP-hhZ"/>
+                    <constraint firstItem="YXf-Ya-ZH3" firstAttribute="top" secondItem="zQB-ni-lJy" secondAttribute="top" constant="2" id="QoW-6t-V8j"/>
+                    <constraint firstAttribute="bottom" secondItem="88T-7z-OdE" secondAttribute="bottom" constant="2" id="bTI-1E-4dL"/>
+                    <constraint firstAttribute="bottom" secondItem="YXf-Ya-ZH3" secondAttribute="bottom" constant="2" id="djI-gn-JEW"/>
+                    <constraint firstAttribute="trailing" secondItem="88T-7z-OdE" secondAttribute="trailing" constant="2" id="iRq-SF-40n"/>
+                    <constraint firstItem="88T-7z-OdE" firstAttribute="leading" secondItem="zQB-ni-lJy" secondAttribute="leading" constant="2" id="pSw-5R-di0"/>
+                    <constraint firstItem="YXf-Ya-ZH3" firstAttribute="leading" secondItem="zQB-ni-lJy" secondAttribute="leading" constant="2" id="uEl-De-KX9"/>
                 </constraints>
             </customView>
             <connections>
                 <outlet property="barView" destination="YXf-Ya-ZH3" id="SWg-h3-9eU"/>
                 <outlet property="barViewTopConstraint" destination="QoW-6t-V8j" id="f6B-be-B0B"/>
+                <outlet property="label" destination="88T-7z-OdE" id="6WV-u9-N9m"/>
             </connections>
         </collectionViewItem>
     </objects>

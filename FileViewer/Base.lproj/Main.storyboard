@@ -742,12 +742,12 @@
                                                     <rect key="frame" x="1" y="0.0" width="521" height="239"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="none" alternatingRowBackgroundColors="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="OaM-4R-XYm" viewBased="YES" id="NfM-Aj-f0v">
+                                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="OaM-4R-XYm" viewBased="YES" id="NfM-Aj-f0v">
                                                             <rect key="frame" x="0.0" y="0.0" width="638" height="216"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="gridColor" red="0.36074221635125103" green="0.99293441785274816" blue="0.9945768521066054" alpha="0.24515912576687116" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                             <tableColumns>
                                                                 <tableColumn identifier="buildTime" width="116" minWidth="40" maxWidth="1000" id="ZgG-sS-23N">
                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Build Time">

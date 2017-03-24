@@ -11,8 +11,13 @@ import AppKit
 class HistogramBar: NSCollectionViewItem {
   weak var mouseDelegate: MouseDelegate?
 
+  @IBOutlet weak var label: NSTextField!
   override func mouseEntered(with event: NSEvent) {
-    mouseDelegate?.mousedOver(sender: self)
+    mouseDelegate?.mouseEntered(sender: self, event: event)
+  }
+
+  override func mouseExited(with event: NSEvent) {
+    mouseDelegate?.mouseExited(sender: self)
   }
 
   override func mouseDown(with event: NSEvent) {
@@ -24,11 +29,30 @@ class HistogramBar: NSCollectionViewItem {
   @IBOutlet weak var barViewTopConstraint: NSLayoutConstraint!
 
   @IBOutlet weak var barView: NSView!
+  var trackingArea: NSTrackingArea? {
+    didSet {
+      if let oldValue = oldValue {
+        view.removeTrackingArea(oldValue)
+      }
+
+      if let trackingArea = trackingArea {
+        view.addTrackingArea(trackingArea)
+      }
+    }
+  }
+
+  func showTooltip(for buildTime: FunctionBuildTime, event: NSEvent) {
+    label.stringValue = ""
+  }
+
+  func hideTooltip() {
+    label.stringValue = ""
+  }
 }
 
 extension CGColor {
   static var random: CGColor {
-    let randFloat = { CGFloat(arc4random_uniform(255)) / 255.0 }
+    let randFloat = { CGFloat(arc4random_uniform(230)) / 255.0 }
     let (r, g, b, a) = (randFloat(), randFloat(), randFloat(), randFloat())
     print("\(r) \(g) \(b) \(a)")
     return CGColor(red: r, green: g, blue: b, alpha: a)
@@ -37,7 +61,8 @@ extension CGColor {
 
 protocol MouseDelegate: NSObjectProtocol {
   func doubleClicked(sender: NSCollectionViewItem)
-  func mousedOver(sender: NSCollectionViewItem) 
+  func mouseEntered(sender: NSCollectionViewItem, event: NSEvent)
+  func mouseExited(sender: NSCollectionViewItem)
 }
 
 extension NSViewController {
@@ -74,8 +99,8 @@ class BuildTimesHistogramViewController: NSViewController, NSCollectionViewDeleg
 
   var itemScale: CGFloat = 1 {
     didSet {
-      if let windowSize = window?.contentView?.bounds.size {
-        itemSize = itemSize(windowSize: windowSize, itemScale: itemScale)
+      if let collectionViewSize = collectionView?.bounds.size {
+        itemSize = itemSize(collectionViewSize: collectionViewSize, itemScale: itemScale)
       }
     }
   }
@@ -89,20 +114,20 @@ class BuildTimesHistogramViewController: NSViewController, NSCollectionViewDeleg
   }
 
   @objc private func windowResized() {
-    if let windowSize = window?.contentView?.bounds.size {
-      itemSize = itemSize(windowSize: windowSize, itemScale: itemScale)
+    if let collectionViewSize = collectionView?.bounds.size {
+      itemSize = itemSize(collectionViewSize: collectionViewSize, itemScale: itemScale)
     }
   }
 
-  private func itemSize(windowSize: NSSize, itemScale: CGFloat) -> NSSize {
-    return NSSize(width: BuildTimesHistogramViewController.baseItemSize.width * itemScale, height: windowSize.height)
+  private func itemSize(collectionViewSize: NSSize, itemScale: CGFloat) -> NSSize {
+    return NSSize(width: BuildTimesHistogramViewController.baseItemSize.width * itemScale, height: collectionViewSize.height * itemScale)
   }
 
   override func viewDidAppear() {
     super.viewDidAppear()
     collectionView.reloadData()
-    if let windowSize = window?.contentView?.bounds.size {
-      itemSize = itemSize(windowSize: windowSize, itemScale: itemScale)
+    if let collectionViewSize = collectionView?.bounds.size {
+      itemSize = itemSize(collectionViewSize: collectionViewSize, itemScale: itemScale)
     }
   }
 
@@ -114,7 +139,9 @@ class BuildTimesHistogramViewController: NSViewController, NSCollectionViewDeleg
     guard let histogramBar = collectionView.makeItem(withIdentifier: String(describing: HistogramBar.self), for: indexPath) as? HistogramBar else {
       fatalError()
     }
-    histogramBar.barView?.layer?.backgroundColor = .random
+
+    let randomColor = CGColor.random
+    histogramBar.barView?.layer?.backgroundColor = randomColor
     if indexPath.item < buildTimes.count {
       let buildTime = buildTimes[indexPath.item]
       let maybeLongest = buildTimes.max { (lhs: FunctionBuildTime, rhs: FunctionBuildTime) -> Bool in lhs.buildTimeSeconds < rhs.buildTimeSeconds }
@@ -131,6 +158,9 @@ class BuildTimesHistogramViewController: NSViewController, NSCollectionViewDeleg
     }
 
     histogramBar.mouseDelegate = self
+    histogramBar.trackingArea = NSTrackingArea(rect: histogramBar.view.frame, options: [.mouseEnteredAndExited, .activeAlways], owner: histogramBar, userInfo: nil)
+//    histogramBar.label.frame = CGRect(x: 0, y: 0, width: histogramBar.view.bounds.size.height, height: histogramBar.view.bounds.size.width)
+    histogramBar.label.layer?.setAffineTransform(CGAffineTransform(rotationAngle: CGFloat(M_PI_2)))
     return histogramBar
   }
 
@@ -154,8 +184,18 @@ class BuildTimesHistogramViewController: NSViewController, NSCollectionViewDeleg
     }
   }
 
-  func mousedOver(sender: NSCollectionViewItem) {
-    print("moused over: \(sender)")
+  func mouseEntered(sender: NSCollectionViewItem, event: NSEvent) {
+//    guard let histogramBar = sender as? HistogramBar, let path = collectionView.indexPath(for: sender), path.item < buildTimes.count else {
+//      return
+//    }
+//
+//    let buildTime = buildTimes[path.item]
+//    histogramBar.showTooltip(for: buildTime, event: event)
+  }
+
+  func mouseExited(sender: NSCollectionViewItem) {
+//    guard let histogramBar = sender as? HistogramBar else { return }
+//    histogramBar.hideTooltip()
   }
 
   func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> NSSize {
